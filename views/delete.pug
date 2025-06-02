@@ -1,0 +1,15 @@
+doctype html
+html
+	head
+		title Delete Account
+		link(rel="stylesheet", href="/css/style.css")
+	body
+		.container
+			h1 Delete Account
+
+			p(style="color: red; margin-bottom: 2rem; text-align: center;")
+				| This will permanently delete your account and all of your tasks.
+
+			form(method="post", action="/delete-account", style="display: flex; justify-content: center;")
+				button.delete-confirm(type="submit") Confirm Delete
+

@@ -1,0 +1,21 @@
+doctype html
+html
+	head
+		title Register
+		link(rel="stylesheet", href="/css/style.css")
+		script(src="/js/register.js")
+	body
+		.container
+			h1 Create an Account
+
+			form#registerForm(action="/register", method="post")
+				.form-group
+					label(for="username") Username:
+					input(type="text", name="username", required)
+
+				.form-group
+					label(for="password") Password:
+					input(type="password", name="password", required)
+
+				button(type="submit") Register
+

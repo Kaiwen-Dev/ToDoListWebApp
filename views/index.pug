@@ -1,0 +1,95 @@
+doctype html
+html
+	head
+		title To-Do List
+		link(rel="stylesheet", href="/css/style.css")
+		script(src="/js/script.js")
+	body
+		.container
+			//- Logout + Delete Account
+			.actions(style="display: flex; justify-content: flex-end; gap: 1rem; margin-bottom: 1rem;")
+				a.logout-link(href="/logout") Logout
+				a.delete-link(href="/delete-account") Delete Account
+
+			h1 To-Do List
+
+			//- Add Task Form
+			form#addForm(action="/add", method="post")
+				input(type="text", name="title", placeholder="Add a new task...", required)
+				input(type="date", name="deadline")
+				button(type="submit") +
+
+			//- Filter, Sort, Overdue Selection
+			form#filterForm(action="/tasks", method="get")
+				label(for="status") Filter by Status:
+				select(name="status", id="status", onchange="this.form.submit()")
+					option(value="", selected=(!status)) Show All
+					option(value="in progress", selected=(status === 'in progress')) In Progress
+					option(value="done", selected=(status === 'done')) Done
+
+				label(for="sort") Sort by:
+				select(name="sort", id="sort", onchange="this.form.submit()")
+					option(value="", selected=(!sort)) Default
+					option(value="deadline_asc", selected=(sort === 'deadline_asc')) Deadline (Soonest)
+					option(value="deadline_desc", selected=(sort === 'deadline_desc')) Deadline (Latest)
+
+				label(for="overdue")
+					input(type="checkbox", name="overdue", value="true", onchange="this.form.submit()", checked=overdue)
+					| Show Overdue
+
+			//- To-Do List
+			.todo-list
+				each todo in todos
+					.todo-item(class=(todo.status === 'done' ? 'done' : ''), data-id=todo.id)
+						label.checkbox-wrapper
+							input.status-checkbox(type="checkbox", checked=(todo.status === 'done'))
+							span.custom-checkbox
+						span.title #{todo.title}
+
+						//- Deadline Feature
+						if todo.deadline
+							- const deadline = new Date(todo.deadline)
+							- const today = new Date()
+							- today.setHours(0, 0, 0, 0)
+							- const oneDay = 24 * 60 * 60 * 1000
+							- const daysDiff = Math.floor((deadline - today) / oneDay)
+							- let deadlinelabel = ''
+							- let deadlineClass = ''
+
+							if daysDiff < 0
+								- deadlinelabel = 'Overdue'
+								- deadlineClass = 'overdue'
+							else if daysDiff === 0
+								- deadlinelabel = 'Due today'
+								- deadlineClass = 'due-today'
+							else if daysDiff <= 7
+								- deadlinelabel = 'Due in ' + daysDiff + ' day' + (daysDiff === 1 ? '' : 's')
+								- deadlineClass = 'due-soon'
+							else
+								- const options = { month: 'short', day: 'numeric' }
+								- deadlinelabel = 'Due ' + deadline.toLocaleDateString('en-US', options)
+								- deadlineClass = 'due-later'
+
+							span.deadline(class=deadlineClass)= deadlinelabel
+						else
+							span.deadline No due date
+
+						button.delete-button(type="button") x
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

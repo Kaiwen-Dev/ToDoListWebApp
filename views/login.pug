@@ -1,0 +1,27 @@
+doctype html
+html
+	head
+		title Login
+		link(rel="stylesheet", href="/css/style.css")
+		script(src="/js/login.js")
+	body
+		.container
+			h1 Login to Your Account
+
+			form#loginForm(action="/login", method="post")
+				.form-group
+					label(for="username") Username:
+					input(type="text", name="username", required)
+
+				.form-group
+					label(for="password") Password:
+					input(type="password", name="password", required)
+
+				button(type="submit") Log In
+
+			p.error-message(style="color: red; display: none;") Invalid username or password.
+
+			p(style="margin-top: 1rem;")
+				| Don’t have an account?
+				a.register-link(href="/register", style="margin-left: 0.25rem;") Register here
+
